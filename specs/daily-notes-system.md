@@ -71,7 +71,29 @@ Current status of each project worked on, with delta/changes.
   - Update project progress
   - Keep summary current
 
-- **On session end:** Final summary and full context capture
+- **On session end (manual trigger):** Final summary and full context capture
+  - Run: `finalize-notes` command
+  - Or: Tell Pinchy "finalize today's notes"
+  - Pinchy will: Complete the session summary, commit to GitHub, prepare for next session
+
+## Quick Commands
+
+**Finalize today's notes:**
+```bash
+finalize-notes
+```
+
+**Or just tell Pinchy:**
+```
+finalize today's notes
+```
+
+Pinchy will:
+1. Complete final session summary
+2. Ensure all decisions/corrections captured
+3. Final project status update
+4. Commit to GitHub with timestamp
+5. Confirm completion
 
 ## Format Guidelines
 
