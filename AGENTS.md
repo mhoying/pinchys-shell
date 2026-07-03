@@ -32,9 +32,10 @@ Do not manually reread startup files unless:
 
 ## Backup System
 
-**Hybrid approach (Option 3):**
-- **Nightly:** Systemd timer backs up at 2:00 AM PDT
-- **Heartbeat:** I also commit/push changes during conversation
+**Heartbeat-driven with 7-day reminder:**
+- **Backups during chats:** I commit/push changes whenever we're talking
+- **Reminder:** If we haven't backed up in >7 days, I remind you
+- **Quick command:** Run `pb` anytime to backup
 - **Repository:** `pinchys-shell` on GitHub (public)
 - **See:** BACKUP.md for details
 

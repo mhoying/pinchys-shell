@@ -1,0 +1,123 @@
+#!/bin/bash
+# Pinchy's AI Wrapper - Intelligently routes to Mistral or Haiku
+# Usage: ai [--force-local|--force-cloud] "prompt" or ai [--force-local|--force-cloud] < input.txt
+
+set -e
+
+MISTRAL_ENDPOINT="http://localhost:11434/api/generate"
+MISTRAL_MODEL="mistral"
+HAIKU_MODEL="anthropic/claude-haiku-4-5"
+
+# Parse flags
+FORCE_LOCAL=0
+FORCE_CLOUD=0
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --force-local)
+            FORCE_LOCAL=1
+            shift
+            ;;
+        --force-cloud)
+            FORCE_CLOUD=1
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+# Get prompt from argument or stdin
+if [ $# -gt 0 ]; then
+    PROMPT="$*"
+else
+    PROMPT=$(cat)
+fi
+
+if [ -z "$PROMPT" ]; then
+    echo "Error: No prompt provided" >&2
+    echo "Usage: ai [--force-local|--force-cloud] 'prompt' or ai < file.txt" >&2
+    exit 1
+fi
+
+# Determine whether to use Mistral or Haiku
+# Heuristics for local (Mistral):
+# - Short prompts (<200 chars)
+# - Simple factual questions
+# - Code formatting/syntax
+# - File operations
+# - Git operations
+# - Basic text manipulation
+# - No analysis/reasoning keywords
+
+USE_LOCAL=0
+
+if [ $FORCE_CLOUD -eq 1 ]; then
+    USE_LOCAL=0
+elif [ $FORCE_LOCAL -eq 1 ]; then
+    USE_LOCAL=1
+else
+    # Auto-detect based on prompt characteristics
+    PROMPT_LEN=${#PROMPT}
+    
+    # Keywords that suggest cloud/reasoning needed
+    REASONING_KEYWORDS="analyze|explain|compare|why|how|design|architecture|strategy|opinion|evaluate|summarize|improve|refactor|optimize|best practice|trade-off"
+    
+    # Keywords that suggest local is fine
+    LOCAL_KEYWORDS="git|commit|file|read|write|json|format|grep|sed|awk|command|syntax|error|fix"
+    
+    if [[ $PROMPT =~ $REASONING_KEYWORDS ]]; then
+        USE_LOCAL=0
+    elif [[ $PROMPT =~ $LOCAL_KEYWORDS ]] || [ $PROMPT_LEN -lt 150 ]; then
+        USE_LOCAL=1
+    else
+        # Default to cloud for safety
+        USE_LOCAL=0
+    fi
+fi
+
+# Execute the appropriate model
+if [ $USE_LOCAL -eq 1 ]; then
+    # Use Mistral locally
+    RESPONSE=$(curl -s "$MISTRAL_ENDPOINT" -d "{
+        \"model\": \"$MISTRAL_MODEL\",
+        \"prompt\": $(echo "$PROMPT" | jq -R -s '.' 2>/dev/null || echo "\"$PROMPT\""),
+        \"stream\": false
+    }" 2>/dev/null | jq -r '.response' 2>/dev/null)
+    
+    if [ -z "$RESPONSE" ]; then
+        echo "Error: Mistral endpoint not responding" >&2
+        exit 1
+    fi
+    
+    echo "$RESPONSE"
+else
+    # Use Haiku via Claude
+    # Note: This requires ANTHROPIC_API_KEY to be set
+    python3 - <<EOF "$PROMPT" "$HAIKU_MODEL" 2>/dev/null
+import sys
+import json
+
+try:
+    import anthropic
+    prompt = sys.argv[1]
+    model = sys.argv[2]
+    
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    
+    print(message.content[0].text)
+except ImportError:
+    print("Error: anthropic library not found. Install with: pip install anthropic", file=sys.stderr)
+    sys.exit(1)
+except Exception as e:
+    print(f"Error: {str(e)}", file=sys.stderr)
+    sys.exit(1)
+EOF
+fi

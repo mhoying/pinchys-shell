@@ -1,14 +1,14 @@
 # Pinchy's Shell - Backup System
 
 ## Overview
-This repository serves as a redundant backup for OpenClaw configuration, identity, memory, and notes. The backup system uses **Option 3: Hybrid Approach**.
+This repository serves as a redundant backup for OpenClaw configuration, identity, memory, and notes. The backup system uses **Heartbeat-Driven Backups** with a **7-day reminder**.
 
 ## How It Works
 
-### Nightly Automated Backup
-- **When:** Every night at 2:00 AM PDT
-- **How:** Systemd timer triggers `backup-to-github.sh`
-- **What:** Automatically commits and pushes any changes to GitHub
+### Heartbeat Backups
+- **When:** During conversational sessions with Mr. Barnaby
+- **How:** I manually commit and push any changes
+- **What:** Captures all updates in real-time during active use
 - **Files backed up:**
   - `AGENTS.md` - Workflow preferences
   - `SOUL.md` - Personality & boundaries
@@ -17,44 +17,41 @@ This repository serves as a redundant backup for OpenClaw configuration, identit
   - `TOOLS.md` - Local environment config
   - `HEARTBEAT.md` - Scheduled checks
   - `memory/` - Long-term memory files
-  - `backup-to-github.sh` - This script
+  - All other config files
 
-### Heartbeat Backup
-- **When:** During conversational heartbeat checks
-- **What:** I manually commit and push if there are recent changes
-- **Purpose:** Captures updates between nightly backups
+### 7-Day Reminder
+- **When:** During heartbeat checks, I verify last backup timestamp
+- **If overdue:** I remind you that it's been >7 days since last backup
+- **Action:** Run `pb` command to backup immediately
 
-### Why Both?
-1. **Nightly cron:** Never lose more than 24 hours of work
-2. **Heartbeat:** Captures urgent changes immediately
-3. **Total redundancy:** Covers all scenarios
+### Why This Approach?
+1. **Laptop-friendly:** No scheduled jobs on a sleeping laptop
+2. **Real-time:** Captures changes during active sessions
+3. **Safety net:** 7-day reminder ensures you never go too long without backup
+4. **Zero friction:** One-word command `pb` to backup anytime
 
-## System Files
+## Quick Commands
 
-**Service unit:** `~/.config/systemd/user/pinchys-backup.service`  
-**Timer unit:** `~/.config/systemd/user/pinchys-backup.timer`  
-**Backup script:** `./backup-to-github.sh`
-
-## Checking Status
-
+**Backup now:**
 ```bash
-# Check timer status
-systemctl --user status pinchys-backup.timer
-
-# View timer logs
-journalctl --user -u pinchys-backup.service -n 20
-
-# Check next scheduled run
-systemctl --user list-timers pinchys-backup.timer
+pb
 ```
 
-## Backup Log
-Backups are logged to: `/tmp/pinchy-backup.log`
-
-View recent backups:
+**Check backup age:**
 ```bash
-tail -20 /tmp/pinchy-backup.log
+check-backup-age
 ```
+
+**View last backup info:**
+```bash
+cat ~/.openclaw/workspace/.backup-state.json
+```
+
+## How to Interpret Reminders
+
+✓ `Backup is current (2d ago)` → All good, no action needed  
+⚠ `Last backup was 8 days ago. Run 'pb' to backup.` → You should backup soon  
+⚠ `Never backed up! Run 'pb' to backup now.` → First time setup
 
 ## Repository
 - **URL:** https://github.com/mhoying/pinchys-shell
