@@ -8,6 +8,7 @@ A structured system for tracking all in-flight projects, efforts, and planned wo
 - No information lost in chat compression or history
 - Ability to pick up any project without reading session history
 - Clear status visibility across all work
+- Capture key human prompts that drove the work
 
 ## Architecture
 
@@ -34,15 +35,16 @@ A structured system for tracking all in-flight projects, efforts, and planned wo
 
 **Required Sections:**
 1. **Title** — Clear name of the project/effort
-2. **Status** — One of: `planning | in_progress | blocked | paused | done | archived`
+2. **Status** — One of: `planning | in_progress | blocked | paused | milestone | done | archived`
 3. **Description** — What is this? Why does it matter?
 4. **Ask/Requirements** — What needs to happen? What's the end goal?
 5. **Current State** — Where are we now? What's been done?
 6. **Blockers** — Anything preventing progress? (if status is `blocked`)
-7. **Spec** — Link to spec file (if this is a development project)
-8. **Related Files** — Links to supporting docs, task files, notes
-9. **Last Updated** — Date and brief note on what changed
-10. **Notes** — Any additional context
+7. **Key Prompts** — Literal prompts/questions that defined this work (from human side)
+8. **Spec** — Link to spec file (if this is a development project)
+9. **Related Files** — Links to supporting docs, task files, notes
+10. **Last Updated** — Date and brief note on what changed
+11. **Notes** — Any additional context
 
 **Example structure:**
 ```markdown
@@ -64,11 +66,17 @@ Integrate local Ollama models (Mistral 7B/13B) as fallback agents to reduce Haik
 - Models integrated into OpenClaw config
 - Testing revealed: CPU-only inference = 60+ sec latency
 - Conclusion: Not viable for interactive chat
+- `ai` CLI wrapper works fine for quick queries (6 sec)
 
 ## Blockers
 - **CPU-only hardware limitation:** ThinkPad X1 has no discrete GPU
 - **Latency unacceptable:** 60+ seconds per response kills conversation flow
 - **Token budget sufficient:** Haiku is cheaper and faster anyway
+
+## Key Prompts
+- "i have a feeling that we should be also be running the really simple stuff on a local model and save the tokens"
+- "should we change the think on haiku for now to give us some more runway?"
+- "why dont you configure openclaw to recognize the new models"
 
 ## Spec
 See: `specs/local-model-integration.md` (not yet created)
@@ -92,7 +100,8 @@ See: `specs/local-model-integration.md` (not yet created)
 | `in_progress` | Active work, making progress | Building the feature |
 | `blocked` | Can't proceed, waiting on something | Needs external decision or info |
 | `paused` | Intentionally paused, will resume | Deprioritized but not abandoned |
-| `done` | Completed and shipped | Feature works, tests pass |
+| `milestone` | Milestone completed, but more work planned | Phase 1 done, phase 2 planned |
+| `done` | Completed and shipped | Feature works, tests pass, no more work planned |
 | `archived` | Old projects, reference only | Historical for learning |
 
 ### 4. Workflow
@@ -104,15 +113,33 @@ See: `specs/local-model-integration.md` (not yet created)
 4. Write spec if it's a dev project
 
 **During work:**
-1. Update project file: Current State, Blockers, Related Files
+1. Update project file: Current State, Blockers, Related Files, Key Prompts
 2. Update PROJECTS.md: Status, Last Updated
+
+**Completing milestone:**
+1. Set Status to `milestone`
+2. Update Current State with what's done
+3. Keep project open with next steps documented
 
 **Completing project:**
 1. Set Status to `done`
 2. Update Current State with final summary
 3. Move to ARCHIVE.md (optional, or just mark as done)
 
-### 5. File Organization
+### 5. Key Prompts Section
+**What goes here:** Literal, verbatim prompts from Mr. Barnaby that drove or shaped this work.
+
+**Why:** Preserves the human intent. When coming back to a project months later, you can see exactly what was asked and why the work mattered.
+
+**Format:**
+```markdown
+## Key Prompts
+- "exact prompt from conversation 1"
+- "exact prompt from conversation 2"
+- "exact prompt defining the scope"
+```
+
+### 6. File Organization
 
 ```
 workspace/
@@ -133,6 +160,7 @@ workspace/
 - [ ] Can pick up any project without reading chat history
 - [ ] Status is always current and accurate
 - [ ] Related files are linked, not buried in docs
+- [ ] Key prompts capture human intent
 - [ ] System doesn't get stale (actively maintained)
 
 ## Implementation Notes
@@ -141,3 +169,4 @@ workspace/
 - Use relative links for file references
 - Spec files go in `specs/`, not `projects/`
 - Commit changes to GitHub whenever project status changes
+- Key Prompts preserve the "why" — save exact wording when possible
