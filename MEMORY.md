@@ -1,18 +1,5 @@
 # MEMORY.md - Pinchy's Operational Memory
 
-## Hardware & Performance
-
-**Hardware:** ThinkPad X1 (no GPU) = CPU-only. Local models = 60-120 sec latency. Not viable for agent chat. CLI wrapper works fine (~6 sec).
-
-**Models:**
-1. Local `ai` CLI: ~6 sec, free
-2. Haiku: conversation, fast, cheap
-3. Haiku + /thinking medium: when reasoning needed
-4. Sonnet: when Haiku isn't enough
-5. Opus: emergency only
-
-**Token Budget:** Token bucket = continuous replenishment, not monthly reset. Safe to use Haiku.
-
 ## Development & Projects
 
 **Spec first, then build.** All specs in `/home/mattie/.openclaw/workspace/specs/`. Don't build without a spec.
