@@ -1,0 +1,51 @@
+# Secrets & Credentials
+.env
+.env.local
+.env.*.local
+.env.production
+secrets/
+*.key
+*.pem
+credentials.json
+service-account*.json
+
+# Local Configuration
+config.local.json
+config.local.yaml
+.secrets/
+
+# Temporary / Generated
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.log
+tmp/
+temp/
+
+# Node / Package Management
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Build artifacts
+dist/
+build/
+*.o
+*.a
+*.so
+
+# OS-specific
+Thumbs.db
+.AppleDouble
+.LSOverride

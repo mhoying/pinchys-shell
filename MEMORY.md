@@ -25,9 +25,24 @@
 - `pb` — backup
 - `check-backup-age` — verify backup age
 
+## API Keys & Secrets
+
+**Storage:**
+- API keys live in `.env` file (never committed to git)
+- `.env` is gitignored (see `.gitignore`)
+- `.env.example` shows what keys are needed; fill in actual values locally
+- Never put secrets in TOOLS.md, MEMORY.md, specs, or project files
+
+**For Integration Setup:**
+- Copy `.env.example` → `.env`
+- Fill in real values
+- Scripts/integrations read from `.env` at runtime
+- Commit `.env.example` (template only), never commit `.env`
+
 ## Red Lines
 
 - Don't exfiltrate private data
+- Never commit secrets to git (use `.env` + `.gitignore`)
 - Inspect existing state first before changing system config (crontab, systemd, nginx, shell rc files, etc.). Preserve/merge by default, don't clobber.
 
 ## Environment
