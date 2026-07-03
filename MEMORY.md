@@ -61,6 +61,7 @@ Note it in daily_notes. Update MEMORY.md if it's a pattern. Apply immediately.
 
 ## Standing Rules
 
+- **Sync memory/* to GitHub automatically** — commit and push daily notes every session
 - Commit significant changes to GitHub
 - Use absolute paths always
 - Daily notes every 15 min, finalized at session end
