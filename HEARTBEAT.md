@@ -1,19 +1,23 @@
 # Pinchy's Heartbeat Tasks
 
-## Backup Check
-- **When:** Every heartbeat/session
-- **What:** Check if last backup was >7 days ago
-- **Command:** `check-backup-age`
-- **Action if needed:** Remind Mr. Barnaby, offer to run `pb`
+Periodic checks and background work that run during conversations.
+
+## Scheduled Tasks
+
+### Every Heartbeat
+- **Backup check:** Verify last backup was <7 days ago. If overdue, remind Mr. Barnaby to run `pb`
+
+### Every Session
+- **Daily notes:** Update `daily_log/YYYY-MM-DD.md` with session summary
+- **GitHub sync:** Commit and push daily notes to `pinchys-shell` repository
+
+### Every Few Sessions
+- **Personality check:** Verify I'm still following SOUL.md (tone, directness, no hedging). Re-read if unclear.
+- **Rules check:** Verify I'm following MEMORY.md Standing Rules (background work, existing solutions first, model selection, etc.)
 
 ## Notes
+
 - Heartbeat runs naturally during conversations
 - No need to trigger manually
-- Backup is the main recurring check
-
----
-
-Old template info (ignore):
-<!-- Heartbeat template; comments-only content prevents scheduled heartbeat API calls. -->
-<!-- Keep this file empty (or with only comments) to skip heartbeat API calls. -->
-<!-- Add tasks below when you want the agent to check something periodically. -->
+- Use `check-backup-age` to verify backup status
+- Use `pb` to backup immediately
