@@ -41,6 +41,7 @@
 
 ## Standing Rules
 
+- **Background work by default** — Use `exec` with `background: true` or `sessions_spawn` for work >10s. Don't block waiting. Report progress incrementally; don't wait for final results unless explicitly needed.
 - **Sync daily_log/* to GitHub automatically** — commit and push daily notes every session
 - **File changes:** If changed via OpenClaw and/or already in git → commit it
 - **Model selection:** Suggest Mistral/bigger Claude/manual Gemini only when Haiku will obviously fail. Default to Haiku.
