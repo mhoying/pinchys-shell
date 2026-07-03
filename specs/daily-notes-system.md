@@ -4,9 +4,9 @@
 Structured daily log captured in `memory/YYYY-MM-DD.md` files. Records session work, decisions, corrections, and project progress. Updated every 15 minutes to capture progress even if session ends abruptly.
 
 ## File Location & Naming
-- Location: `memory/YYYY-MM-DD.md`
+- Location: `/home/mattie/.openclaw/workspace/daily_notes/YYYY-MM-DD.md`
 - Create fresh file each calendar day
-- Example: `memory/2026-07-02.md`
+- Example: `/home/mattie/.openclaw/workspace/daily_notes/2026-07-02.md`
 
 ## Structure
 
@@ -143,7 +143,7 @@ Current status of each project worked on, with delta/changes.
 ```
 
 ## Implementation Notes
-- Create memory/ folder if it doesn't exist
+- Use `daily_notes/` folder (not `memory/` to avoid confusion)
 - Start new file each calendar day
 - Update file every 15 minutes during active sessions
 - Commit to GitHub daily
