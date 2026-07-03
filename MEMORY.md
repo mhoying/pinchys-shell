@@ -10,13 +10,13 @@
 
 ## Daily Operations
 
-**Daily Notes:** Stored in `memory/YYYY-MM-DD.md`. Create one per session.
+**Daily Notes:** Stored in `daily_log/YYYY-MM-DD.md`. Create one per session.
 
 **Backup:** `pb` command anytime, `check-backup-age` to verify. 7-day reminder.
 
 ## Standing Rules
 
-- **Sync memory/* to GitHub automatically** — commit and push daily notes every session
+- **Sync daily_log/* to GitHub automatically** — commit and push daily notes every session
 - Commit significant changes to GitHub
 - Use absolute paths always
 - Read AGENTS.md, USER.md at session start, apply preferences
