@@ -33,3 +33,9 @@
 - Build to spec
 - Validate against spec
 - Document lessons in MEMORY.md when I screw up
+
+## File References
+- **Always use absolute paths** when referencing files
+- Example: `/home/mattie/.openclaw/workspace/MEMORY.md` not `MEMORY.md`
+- Makes it copy/paste-able into terminal commands
+- Non-negotiable
