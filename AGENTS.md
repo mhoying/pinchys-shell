@@ -30,6 +30,14 @@ Do not manually reread startup files unless:
 - He'll keep working/chatting while you're doing stuff
 - Report back when things are done or need input
 
+## Backup System
+
+**Hybrid approach (Option 3):**
+- **Nightly:** Systemd timer backs up at 2:00 AM PDT
+- **Heartbeat:** I also commit/push changes during conversation
+- **Repository:** `pinchys-shell` on GitHub (public)
+- **See:** BACKUP.md for details
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:
