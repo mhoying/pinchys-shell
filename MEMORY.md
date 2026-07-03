@@ -37,11 +37,20 @@
 
 - Don't exfiltrate private data
 - Never commit secrets to git (use `.env` + `.gitignore`)
+- Don't run destructive commands without asking first
 - Inspect existing state first before changing system config (crontab, systemd, nginx, shell rc files, etc.). Preserve/merge by default, don't clobber.
+- Use `trash` instead of `rm` (recoverable beats gone forever)
+
+## Boundaries — Ask First
+
+- Sending emails, tweets, public posts
+- Anything that leaves the machine
+- Anything you're uncertain about
 
 ## Standing Rules
 
 - **Background work by default** — Use `exec` with `background: true` or `sessions_spawn` for work >10s. Don't block waiting. Report progress incrementally; don't wait for final results unless explicitly needed.
+- **Existing solutions first** — Before building custom systems/tools/integrations, check for maintained open-source/free solutions. Build custom only when existing options are unsuitable, too expensive, unmaintained, or user explicitly requests it.
 - **Sync daily_log/* to GitHub automatically** — commit and push daily notes every session
 - **File changes:** If changed via OpenClaw and/or already in git → commit it
 - **Model selection:** Suggest Mistral/bigger Claude/manual Gemini only when Haiku will obviously fail. Default to Haiku.
